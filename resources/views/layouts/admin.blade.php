@@ -22,6 +22,9 @@
         @livewireStyles
         <script src="https://kit.fontawesome.com/6244811c40.js" crossorigin="anonymous"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
         {{-- WireUI --}}
          <wireui:scripts />
     </head>
@@ -32,20 +35,37 @@
 
 
 <div class="p-4 sm:ml-64 mt-14">
-   <div class="mt-14">
+   <div class="mt-14 flex justify-between items-center w-full">
        @include('layouts.includes.admin.breadcrumbs')
+       @isset($action)
+        <div>
+            {{ $action }}
+        </div>
+           
+       @endisset
    </div>
     {{ $slot }}
 </div>
 
         @stack('modals')
-
+{{-- Mostrar Sweet Alert --}}
+@if(session('swal'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: "{{ session('swal.icon') }}",
+                title: "{{ session('swal.title') }}",
+                text: "{{ session('swal.text') }}",
+            });
+        });
+    </script>
+@endif
         @livewireScripts
-   <body>
+   
       @yield('content')
 
       <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
-   </body>
+   
 
     </body>
 </html>
