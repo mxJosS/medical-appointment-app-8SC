@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
             'Paciente',
             'Doctor',
             'Recepcionista',
-            'Super administrador'
+            'Administrador'
         ];
         foreach ($roles as $role) {
             Role::create(['name' => $role]);
