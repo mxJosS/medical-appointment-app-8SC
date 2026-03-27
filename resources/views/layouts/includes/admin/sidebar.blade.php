@@ -17,13 +17,19 @@
            'name' => 'Roles y permisos',
            'icon' => 'fa-solid fa-shield-halved',
            'href' => route("admin.roles.index"),
-           'active' => request()->routeIs("admin.roles.*"),    
+           'active' => request()->routeIs("admin.roles.*"),
        ],
        [
            'name' => 'Usuarios',
            'icon' => 'fa-solid fa-users',
            'href' => route("admin.users.index"),
            'active' => request()->routeIs("admin.users.*"),
+       ],
+        [
+           'name' => 'Pacientes',
+           'icon' => 'fa-solid fa-user-injured',
+           'href' => route("admin.patients.index"),
+           'active' => request()->routeIs("admin.patients.*"),
        ],
 
    ];
@@ -45,8 +51,8 @@
                @else
                   @isset($link['submenu'])
                      {{-- Botón para desplegar Submenú --}}
-                     <button type="button" 
-                             class="flex items-center w-full justify-between px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group" 
+                     <button type="button"
+                             class="flex items-center w-full justify-between px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group"
                              data-collapse-toggle="dropdown-{{ $loop->index }}">
                         <span class="inline-flex items-center">
                            <span class="w-6 h-6 inline-flex items-center justify-center text-gray-500">
@@ -58,7 +64,7 @@
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
                         </svg>
                      </button>
-                     
+
                      <ul id="dropdown-{{ $loop->index }}" class="hidden py-2 space-y-2">
                         @foreach ($link['submenu'] as $sub)
                            <li>

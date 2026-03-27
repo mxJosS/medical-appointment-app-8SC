@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all(); 
+        $roles = Role::all();
         return view('admin.users.create', compact('roles'));
     }
 
@@ -47,7 +47,14 @@ class UserController extends Controller
             'title' => 'Usuario creado correctamente',
             'text' => 'El usuario se ha creado correctamente'
         ]);
-        return redirect(route('admin.users.index'))->with('success', 'Usuario creado correctamente');
+        //Si el usuario creado es un paciente, se redirecciona al modulo de pacientes
+        if($user::role('Paciente')){
+            //creamos el registro para el paciente
+            $patient = $user->patient()->create([]);
+            $patient->save();
+            return redirect()->route('admin.patients.edit', $patient);
+        }
+        return redirect(route('admin.users.edit', $patient));
     }
 
     /**
