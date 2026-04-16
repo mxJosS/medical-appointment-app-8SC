@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
 
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -13,14 +14,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         // Nueva ruta de admin
         then: function(){
-            Route::middleware('web', 'auth')
+            Route::middleware(['web', 'auth'])
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->redirectTo(
+            guests: '/login',
+            users: '/admin',
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
