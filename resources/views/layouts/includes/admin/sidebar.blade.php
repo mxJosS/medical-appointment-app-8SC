@@ -55,7 +55,7 @@
 
         <div class="h-full px-3 py-4 overflow-y-auto">
 
-            <a href="#" class="flex justify-center items-center w-full mt-4 mb-8 gap-3 group">
+            <a href="{{ route('welcome') }}" class="flex justify-center items-center w-full mt-4 mb-8 gap-3 group">
                 <img src="{{ asset('images/logo_vitalia.png') }}" class="h-12 w-auto" alt="Vitalia Logo" />
                 <span class="text-3xl font-extrabold text-gray-800 tracking-tight">Vitalia</span>
             </a>

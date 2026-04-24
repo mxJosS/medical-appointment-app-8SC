@@ -284,5 +284,15 @@ return [
         'winner'                   => 'ganador',
         'work'                     => 'trabajo',
         'year'                     => 'año',
+        //Personalizados
+        'allergies'                => 'Alergias conocidas',
+        'chronic_conditions'       => 'Enfermedades crónicas',
+        'surgical_history'         => 'Antecedentes quirúrgicos',
+        'family_history'           => 'Antecedentes familiares',
+        'observations'             => 'Observaciones',
+        'emergency_contact_name'   => 'Nombre del contacto de emergencia',
+        'emergency_contact_phone'  => 'Teléfono del contacto de emergencia',
+        'emergency_contact_relationship' => 'Relación del contacto',
+
     ],
 ];
