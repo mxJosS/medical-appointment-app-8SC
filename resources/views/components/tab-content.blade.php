@@ -1,7 +1,6 @@
 @props(['tab','error' => false])
-<div x-show="tab === '{{ $tab }}'">
+<div x-show="tab === '{{ $tab }}'" x-cloak>
     {{ $slot }}
-
 </div>
 
 
