@@ -124,7 +124,6 @@
                         </div>
                     </div>
                 </x-tab-content>
-
                 {{-- Contenido del tab 2: Antecedentes --}}
                 <x-tab-content tab="antecedentes">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -142,7 +141,6 @@
                         </x-wire-textarea>
                     </div>
                 </x-tab-content>
-
                 {{-- Contenido del tab 3: información general --}}
                 <x-tab-content tab="informacion-general">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -164,7 +162,6 @@
                         </div>
                     </div>
                 </x-tab-content>
-
                 {{-- Contenido del tab 4: Contacto de emergencia --}}
                 <x-tab-content tab="contacto-emergencia">
                     <div class="space-y-4">
@@ -180,7 +177,6 @@
                         </div>
                     </div>
                 </x-tab-content>
-
             </x-tabs>
         </x-wire-card>
     </form>

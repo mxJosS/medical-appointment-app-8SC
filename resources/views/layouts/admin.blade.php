@@ -49,6 +49,73 @@
                 });
             </script>
         @endif
+        
+        @if(session('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Éxito!",
+                        text: "{{ session('success') }}",
+                        showConfirmButton: true
+                    });
+                });
+            </script>
+        @endif
+        
+        @if(session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "{{ session('error') }}",
+                    });
+                });
+            </script>
+        @endif
+
+        <!-- Global Delete Confirmation -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.addEventListener('submit', function(e) {
+                    if (e.target && e.target.tagName === 'FORM') {
+                        const methodInput = e.target.querySelector('input[name="_method"]');
+                        if (methodInput && methodInput.value.toUpperCase() === 'DELETE') {
+                            if (!e.target.dataset.confirmed) {
+                                e.preventDefault();
+                                Swal.fire({
+                                    title: '¿Seguro que deseas eliminar este registro?',
+                                    text: "Esta acción no se puede deshacer.",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Sí, eliminar',
+                                    cancelButtonText: 'Cancelar'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        e.target.dataset.confirmed = 'true';
+                                        e.target.submit();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Listener para alertas de Livewire
+            window.addEventListener('swal', function(e) {
+                const data = e.detail[0] || e.detail;
+                Swal.fire({
+                    icon: data.icon || 'success',
+                    title: data.title || '¡Éxito!',
+                    text: data.text,
+                    showConfirmButton: true
+                });
+            });
+        </script>
 
         @livewireScripts
         @yield('content')

@@ -69,8 +69,7 @@ class PatientController extends Controller
         ]);
 
         $patient->update($data);
-        session()->flash('swal', ['icon'=> 'success', 'tittle' => 'Paciente actualizado', 'text'=>'El paciente se ha actualizado correctamente']);
-        return redirect()->route('admin.patients.index')->with('success', 'Patient has been updated successfully');
+        return redirect()->route('admin.patients.index')->with('success', 'Paciente actualizado exitosamente.');
     }
 
     /**
