@@ -7,6 +7,11 @@ use App\Models\Patient;
 use App\Models\Doctor;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentBookedMail;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\TwilioService;
 
 class CreateAppointment extends Component
 {
@@ -111,7 +116,7 @@ class CreateAppointment extends Component
 
         $endTime = Carbon::parse($this->selectedDate . ' ' . $this->selectedTime)->addMinutes($this->selectedDuration)->format('H:i:s');
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'patient_id' => $this->patient_id,
             'doctor_id' => $this->selectedDoctorId,
             'date' => $this->selectedDate,
@@ -122,11 +127,22 @@ class CreateAppointment extends Component
             'status' => 1,
         ]);
 
-        session()->flash('success', 'Cita registrada exitosamente.');
-        return redirect()->route('admin.appointments.index');
+        // Disparar evento para notificaciones (PDF, Email, WhatsApp)
+        event(new \App\Events\AppointmentBooked($appointment));
+
+        // Mostrar alerta de éxito y redirigir usando el listener del layout
+        $this->dispatch('swal-and-redirect', [
+            'icon' => 'success',
+            'title' => '¡Cita registrada!',
+            'text' => 'La cita fue agendada. Se enviará confirmación por correo y WhatsApp.',
+            'url' => route('admin.appointments.index'),
+            'timer' => null,
+            'showConfirmButton' => true
+        ]);
     }
 
     public function render()
+
     {
         $patients = Patient::with('user')->get();
         return view('livewire.admin.appointments.create-appointment', compact('patients'));

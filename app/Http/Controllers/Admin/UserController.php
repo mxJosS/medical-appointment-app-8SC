@@ -80,23 +80,30 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'required|string|min:8|confirmed',
-            'id_number' => 'required|string|max:20|min:5|regex:/^[A-Za-z0-9]+$/|unique:users,id_number,' . $user->id,
-            'phone' => 'required|digits_between:7,15',
-            'address' => 'required|string|max:255',
-            'role_id' => 'required|exists:roles,id',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'id_number'=> 'required|string|max:20|min:5|regex:/^[A-Za-z0-9]+$/|unique:users,id_number,' . $user->id,
+            'phone'    => 'required|digits_between:7,15',
+            'address'  => 'required|string|max:255',
+            'role_id'  => 'required|exists:roles,id',
         ]);
-        $user->update($data);
+
+        // Actualizar campos sin contraseña
+        $user->update(collect($data)->except('password', 'role_id')->toArray());
+
+        // Actualizar contraseña solo si se proporcionó
         if ($request->filled('password')) {
             $user->update(['password' => bcrypt($data['password'])]);
         }
-        $user->roles()->sync($data['role_id']);
+
+        // Sincronizar rol
+        $user->roles()->sync([$data['role_id']]);
+
         session()->flash('swal', [
-            'icon' => 'success',
+            'icon'  => 'success',
             'title' => 'Usuario actualizado correctamente',
-            'text' => 'El usuario se ha actualizado correctamente'
+            'text'  => 'El usuario se ha actualizado correctamente'
         ]);
         return redirect()->route('admin.users.edit', $user->id);
     }

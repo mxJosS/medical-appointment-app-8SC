@@ -15,6 +15,7 @@ class Appointment extends Model
         'duration',
         'reason',
         'status',
+        'reminder_sent',
         'diagnosis',
         'treatment',
         'notes',

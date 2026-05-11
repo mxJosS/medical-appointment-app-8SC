@@ -7,6 +7,11 @@ use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentBookedMail;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\TwilioService;
 
 class AppointmentController extends Controller
 {
@@ -18,13 +23,9 @@ class AppointmentController extends Controller
 
     public function create()
     {
-        // Assuming patients can be retrieved by looking at the patients table,
-        // and we want to show their user's name.
         $patients = Patient::with('user')->get();
-        // Since there is no Doctor model or role defined, we fetch all users or users with some condition.
-        // We'll just fetch all users as potential doctors for now.
         $doctors = User::all();
-        
+
         return view('admin.appointments.create', compact('patients', 'doctors'));
     }
 
@@ -39,27 +40,30 @@ class AppointmentController extends Controller
             'reason' => 'nullable|string',
         ]);
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'patient_id' => $request->patient_id,
             'doctor_id' => $request->doctor_id,
             'date' => $request->date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
-            'duration' => 15, // default
+            'duration' => 15,
             'reason' => $request->reason,
             'status' => 1,
         ]);
+
+        // Disparar evento para notificaciones (PDF, Email, WhatsApp)
+        event(new \App\Events\AppointmentBooked($appointment));
 
         return redirect()->route('admin.appointments.index')->with('success', 'Cita registrada exitosamente.');
     }
 
     public function show(string $id) { }
-    
+
     public function edit(Appointment $appointment)
     {
         $patients = Patient::with('user')->get();
         $doctors = User::all();
-        
+
         return view('admin.appointments.edit', compact('appointment', 'patients', 'doctors'));
     }
 
@@ -88,7 +92,7 @@ class AppointmentController extends Controller
 
     public function destroy(Appointment $appointment)
     {
-        $appointment->delete();
+        Appointment::destroy($appointment->id);
         return redirect()->route('admin.appointments.index')->with('success', 'Cita eliminada exitosamente.');
     }
 }

@@ -42,7 +42,7 @@
                   
                         @foreach ($roles as $role)
                           
-                            <option value="{{ $role->id }}" @selected(old('role_id', $user->role_id) == $role->id)>
+                            <option value="{{ $role->id }}" @selected(old('role_id', $user->roles->first()?->id) == $role->id)>
                                 {{ $role->name }}
                             </option>
                         @endforeach
